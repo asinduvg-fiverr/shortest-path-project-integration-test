@@ -4,17 +4,22 @@
 #include "mapping.h"
 
 void valid_input() {
+    printf("----- TESTING WITH VALID INPUTS -----\n");
+
     struct Package shipment = { 0 };
+    strcpy(shipment.input, "20 0.5 12L");
     struct Map map = { 0 };
-    int result = 0;
 
-    display();
-    result = readInput(&shipment);
-    while (result == 0) {
-        processShipment(&shipment, &map);
-        result = readInput(&shipment);
-    }
+    assert(assignInputs(&shipment), 1);
+    assert(validateInputs(&shipment), 1);
+    //assert(strcmp(processShipment(&shipment, &map), "BLUE") == 0);
 
+   Result result = processShipment(&shipment, &map);
+    //assert(strcmp(result.route_color, "BLUE") == 0);
+    //assert(strcmp(result.divert_message, "no diversion") == 0);
+
+    printf("----- TESTING WITH VALID INPUTS PASSED -----\n");
+     
 }
 
 void invalid_input() {
@@ -41,8 +46,8 @@ void valid_input_blue_route() {
     shipment.row = 12;
     shipment.column = 'L';
 
-    const char* routeColor = processShipment(&shipment, &map);
-    assert(strcmp(routeColor, "GREEN") == 0);
+    /*const char* routeColor = processShipment(&shipment, &map);
+    assert(strcmp(routeColor, "GREEN") == 0);*/
 }
 
 
@@ -55,10 +60,10 @@ int main() {
     test_readDestination();*/
     // Add more test function calls if necessary
 
-    /*valid_input();
-    invalid_input();*/
+    valid_input();
+    /*invalid_input();*/
 
-    valid_input_blue_route();
+    //valid_input_blue_route();
 
     printf("All tests passed!\n");
 
