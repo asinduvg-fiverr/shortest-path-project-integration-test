@@ -113,8 +113,7 @@ Result processShipment(Package* shipment, Map* map) {
 
      //Added the points from direct route to which route is most efficient; Haven't figured how to add the route message.
     if (blueDist <= greenDist && blueDist <= yellowDist) {
-        strncpy(result.route_color, "BLUE", 4);
-        result.route_color[4] = '\0';
+        result.route_color = BLUE;
 
         for (int x = 0; x < directRoute.numPoints; x++) {   //nested for loop to check if the point is already a part of the route to prevent duplicates
             for (int y = 0; y < blueRoute.numPoints; y++) {
@@ -134,8 +133,7 @@ Result processShipment(Package* shipment, Map* map) {
         result.diversion = (blueDist <= 1.0) ? NO_DIVERSION : DIVERT;
     }
     else if (greenDist <= blueDist && greenDist <= yellowDist) {
-        strncpy(result.route_color, "GREEN", 5);
-        result.route_color[5] = '\0';
+        result.route_color = GREEN;
 
         for (int x = 0; x < directRoute.numPoints; x++) {   //nested for loop to check if the point is already a part of the route to prevent duplicates
             for (int y = 0; y < greenRoute.numPoints; y++) {
@@ -155,8 +153,7 @@ Result processShipment(Package* shipment, Map* map) {
         result.diversion = (greenDist <= 1.0) ? NO_DIVERSION : DIVERT;
     }
     else {
-        strncpy(result.route_color, "YELLOW", 6);
-        result.route_color[6] = '\0';
+        result.route_color = YELLOW;
 
         for (int x = 0; x < directRoute.numPoints; x++) {   //nested for loop to check if the point is already a part of the route to prevent duplicates
             for (int y = 0; y < yellowRoute.numPoints; y++) {
@@ -176,15 +173,14 @@ Result processShipment(Package* shipment, Map* map) {
         result.diversion = (yellowDist <= 1.0) ? NO_DIVERSION : DIVERT;
     }
 
-
     Point startPoint;
     Point backPath = { -1, -1 }; // Initialize with invalid row and col values
 
     if (result.diversion == DIVERT) {
-        if (result.route_color == "BLUE") {
+        if (result.route_color == BLUE) {
             startPoint = blueRoute.points[blueClosestIdx];
         }   
-        else if (result.route_color == "GREEN") {
+        else if (result.route_color == GREEN) {
             startPoint = greenRoute.points[greenClosestIdx];
         }
         else {
@@ -202,7 +198,10 @@ Result processShipment(Package* shipment, Map* map) {
     addRoute(&map, &greenRoute);
     addRoute(&map, &yellowRoute);
 
-    printf("Ship on %s LINE, %s\n", result.route_color, result.diversion == DIVERT ? "divert" : "no diversion");
+    printf("Ship on %s LINE, %s\n", 
+        result.route_color == BLUE ? "BLUE" : 
+        result.route_color == GREEN ? "GREEN" : "YELLOW", 
+        result.diversion == DIVERT ? "divert" : "no diversion");
 
     return result;
 

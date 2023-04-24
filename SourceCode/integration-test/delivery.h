@@ -31,9 +31,8 @@ typedef enum {
     NO_DIVERSION
 } Diversion;
 
-
 typedef struct {
-    char route_color[6];
+    int route_color;
     Diversion diversion;
     const char* divert_message;
 } Result;
