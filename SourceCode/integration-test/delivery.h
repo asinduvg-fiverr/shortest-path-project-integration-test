@@ -49,4 +49,6 @@ Result processShipment(Package* shipment, Map* map);
 int charToInt(char character);  //Returns the character converted to int: E.g A/a = 0, B/b = 1,.... etc
 char intToChar(int in);    //does the thing above in reverse: e.g 0 = A, 1 = B.... etc
 
+void addPtToRouteWrapper(const Route* const direct_route, const Route* const route);
+
 #endif

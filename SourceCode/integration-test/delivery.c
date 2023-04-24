@@ -83,6 +83,22 @@ char intToChar(int in) {
     return chara;
 }
 
+void addPtToRouteWrapper(const Route * const direct_route, const Route * const route) {
+    int pass = 0;
+    for (int x = 0; x < direct_route->numPoints; x++) {   //nested for loop to check if the point is already a part of the route to prevent duplicates
+        for (int y = 0; y < route->numPoints; y++) {
+            if (route->points[y].col == direct_route->points[x].col && route->points[y].row == direct_route->points[x].col) {
+                pass = 1;
+            }
+        }
+        if (pass == 0) {
+            addPtToRoute(route, direct_route->points[x]);
+        }
+
+        pass = 0;
+    }
+}
+
 Result processShipment(Package* shipment, Map* map) {
 
     Result result = { 0 };
@@ -106,8 +122,7 @@ Result processShipment(Package* shipment, Map* map) {
 
     Point origin = { 0, -1 };
     Point dest = { destination.col, destination.row };
-    Route directRoute = shortestPath((const Map*)&map, origin, dest);
-    int pass = 0;   
+    Route directRoute = shortestPath((const Map*)&map, origin, dest); 
     /*  Direct route is the route from 0,0 to the destination.
     */
 
@@ -115,18 +130,7 @@ Result processShipment(Package* shipment, Map* map) {
     if (blueDist <= greenDist && blueDist <= yellowDist) {
         result.route_color = BLUE;
 
-        for (int x = 0; x < directRoute.numPoints; x++) {   //nested for loop to check if the point is already a part of the route to prevent duplicates
-            for (int y = 0; y < blueRoute.numPoints; y++) {
-                if (blueRoute.points[y].col == directRoute.points[x].col && blueRoute.points[y].row == directRoute.points[x].col) {
-                    pass = 1;
-                }
-            }
-            if (pass == 0) {
-                addPtToRoute(&blueRoute, directRoute.points[x]);
-            }
-
-            pass = 0;
-        }
+        addPtToRouteWrapper(&directRoute, &blueRoute);
 
         selectedRoute = &blueRoute;
         closestIdx = blueClosestIdx;
@@ -135,18 +139,7 @@ Result processShipment(Package* shipment, Map* map) {
     else if (greenDist <= blueDist && greenDist <= yellowDist) {
         result.route_color = GREEN;
 
-        for (int x = 0; x < directRoute.numPoints; x++) {   //nested for loop to check if the point is already a part of the route to prevent duplicates
-            for (int y = 0; y < greenRoute.numPoints; y++) {
-                if (greenRoute.points[y].col == directRoute.points[x].col && greenRoute.points[y].row == directRoute.points[x].col) {
-                    pass = 1;
-                }
-            }
-            if (pass == 0) {
-                addPtToRoute(&greenRoute, directRoute.points[x]);
-            }
-
-            pass = 0;
-        }
+        addPtToRouteWrapper(&directRoute, &greenRoute);
 
         selectedRoute = &greenRoute;
         closestIdx = greenClosestIdx;
@@ -155,18 +148,7 @@ Result processShipment(Package* shipment, Map* map) {
     else {
         result.route_color = YELLOW;
 
-        for (int x = 0; x < directRoute.numPoints; x++) {   //nested for loop to check if the point is already a part of the route to prevent duplicates
-            for (int y = 0; y < yellowRoute.numPoints; y++) {
-                if (yellowRoute.points[y].col == directRoute.points[x].col && yellowRoute.points[y].row == directRoute.points[x].col) {
-                    pass = 1;
-                }
-            }
-            if (pass == 0) {
-                addPtToRoute(&yellowRoute, directRoute.points[x]);
-            }
-
-            pass = 0;
-        }
+        addPtToRouteWrapper(&directRoute, &yellowRoute);
 
         selectedRoute = &yellowRoute;
         closestIdx = yellowClosestIdx;
