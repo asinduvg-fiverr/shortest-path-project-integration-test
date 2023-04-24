@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <ctype.h>
 #include "delivery.h"
-#include "mapping.h"
 #include <string.h>
 
 void display() {
@@ -11,13 +10,13 @@ void display() {
     printf("=================\n\n");
 }
 
-int readInput(struct Package* shipment) {
+int readInput(Package* shipment) {
     fgets(shipment->input, sizeof(shipment->input), stdin);
 
     return assignInputs(shipment);
 }
 
-int assignInputs(struct Package* shipment) {
+int assignInputs(Package* shipment) {
 
     if (sscanf(shipment->input, "%lf %lf %d %c",
         &shipment->weight, &shipment->size, &shipment->row, &shipment->column) != 4) {
@@ -27,7 +26,7 @@ int assignInputs(struct Package* shipment) {
     return 1;
 }
 
-int validateInputs(struct Package* shipment) {
+int validateInputs(Package* shipment) {
     // Check if weight is valid
     if (!readWeight(shipment->weight)) {
         printf("Invalid weight (must be 1-1000 Kg.)\n");
@@ -84,15 +83,15 @@ char intToChar(int in) {
     return chara;
 }
 
-Result processShipment(struct Package* shipment, struct Map* map) {
+Result processShipment(Package* shipment, Map* map) {
 
     Result result = { 0 };
 
     // Calculate the closest route
-    struct Point destination = { shipment->row, toupper(shipment->column) - 'A' };
-    struct Route blueRoute = getBlueRoute();
-    struct Route greenRoute = getGreenRoute();
-    struct Route yellowRoute = getYellowRoute();
+    Point destination = { shipment->row, toupper(shipment->column) - 'A' };
+    Route blueRoute = getBlueRoute();
+    Route greenRoute = getGreenRoute();
+    Route yellowRoute = getYellowRoute();
 
     int blueClosestIdx = getClosestPoint(&blueRoute, destination);
     int greenClosestIdx = getClosestPoint(&greenRoute, destination);
@@ -102,21 +101,15 @@ Result processShipment(struct Package* shipment, struct Map* map) {
     double greenDist = distance(&destination, &greenRoute.points[greenClosestIdx]);
     double yellowDist = distance(&destination, &yellowRoute.points[yellowClosestIdx]);
 
-    //const char* divertMessage = NULL;
-    //const char* routeColor = NULL;
     struct Route* selectedRoute = NULL;
     int closestIdx = -1;
 
-    struct Point origin = { 0, -1 };
-    struct Point dest = { destination.col, destination.row };
-    struct Route directRoute = shortestPath((const struct Map*)&map, origin, dest);
+    Point origin = { 0, -1 };
+    Point dest = { destination.col, destination.row };
+    Route directRoute = shortestPath((const Map*)&map, origin, dest);
     int pass = 0;   
     /*  Direct route is the route from 0,0 to the destination.
     */
-    // for (int x = 0; x < directRoute.numPoints; x++) { //Could implement a new way to find the closest route but this is probably sufficient.
-     //    printf("%d, %d \n", directRoute.points[x].col, directRoute.points[x].row);
- //        if (directRoute.points[x].col == blueRoute.points);
-    // }
 
      //Added the points from direct route to which route is most efficient; Haven't figured how to add the route message.
     if (blueDist <= greenDist && blueDist <= yellowDist) {
@@ -184,8 +177,8 @@ Result processShipment(struct Package* shipment, struct Map* map) {
     }
 
 
-    struct Point startPoint;
-    struct Point backPath = { -1, -1 }; // Initialize with invalid row and col values
+    Point startPoint;
+    Point backPath = { -1, -1 }; // Initialize with invalid row and col values
 
     if (result.diversion == DIVERT) {
         if (result.route_color == "BLUE") {
@@ -198,7 +191,7 @@ Result processShipment(struct Package* shipment, struct Map* map) {
             startPoint = yellowRoute.points[yellowClosestIdx];
         }
 
-        struct Route possibleMoves = getPossibleMoves(&map, startPoint, backPath);
+        Route possibleMoves = getPossibleMoves(&map, startPoint, backPath);
 
         // Print the possible moves
         for (int i = 0; i < possibleMoves.numPoints; i++) {

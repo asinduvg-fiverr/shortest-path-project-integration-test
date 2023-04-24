@@ -6,25 +6,23 @@
 void valid_input() {
     printf("----- TESTING WITH VALID INPUTS -----\n");
 
-    struct Package shipment = { 0 };
+    Package shipment = { 0 };
     strcpy(shipment.input, "20 0.5 12L");
-    struct Map map = { 0 };
+    Map map = { 0 };
 
-    assert(assignInputs(&shipment), 1);
-    assert(validateInputs(&shipment), 1);
-    //assert(strcmp(processShipment(&shipment, &map), "BLUE") == 0);
+    assert(assignInputs(&shipment) == 1);
+    assert(validateInputs(&shipment) == 1);
 
-   Result result = processShipment(&shipment, &map);
-    //assert(strcmp(result.route_color, "BLUE") == 0);
-    //assert(strcmp(result.divert_message, "no diversion") == 0);
+    Result result = processShipment(&shipment, &map);
+    assert(strcmp(result.route_color, "BLUE") == 0);
+    assert(result.diversion == NO_DIVERSION);
 
-    printf("----- TESTING WITH VALID INPUTS PASSED -----\n");
-     
+    printf("----- TESTING WITH VALID INPUTS PASSED -----\n");  
 }
 
 void invalid_input() {
-    struct Package shipment = { 0 };
-    struct Map map = { 0 };
+    Package shipment = { 0 };
+    Map map = { 0 };
     int result = 0;
 
     display();
@@ -37,10 +35,10 @@ void invalid_input() {
 }
 
 void valid_input_blue_route() {
-    struct Map map = { 0 };
+    Map map = { 0 };
     populateMap(&map);
 
-    struct Package shipment = { 0 };
+    Package shipment = { 0 };
     shipment.weight = 20;
     shipment.size = 0.5;
     shipment.row = 12;

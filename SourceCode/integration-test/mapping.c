@@ -3,9 +3,9 @@
 #include "mapping.h"
 #include "math.h"
 
-struct Map populateMap()
+Map populateMap()
 {
-	struct Map result = {
+	Map result = {
 		//0	1  2  3  4  5  6  7  8  9  0  1  2  3  4  5  6  7  8  9  0  1  2  3  4
 		//A B  C  D  E  F  G  H  I  J  K  L  M  N  O  P  Q  R  S  T  U  V  W  X  Y
 		{
@@ -40,17 +40,17 @@ struct Map populateMap()
 	return result;
 }
 // Get the number of rows in a map.
-int getNumRows(const struct Map* map)
+int getNumRows(const Map* map)
 {
 	return map->numRows;
 }
 // Get the number of columns in a map.
-int getNumCols(const struct Map* map)
+int getNumCols(const Map* map)
 {
 	return map->numCols;
 }
 //Print the map usign the symbols:
-void printMap(const struct Map* map, const int base1, const int alphaCols)
+void printMap(const Map* map, const int base1, const int alphaCols)
 {
 	//              01234567890123456
 	//              1248F
@@ -84,9 +84,9 @@ void printMap(const struct Map* map, const int base1, const int alphaCols)
 	}
 }
 // Build and return the route for the blue trucks.
-struct Route getBlueRoute()
+Route getBlueRoute()
 {
-	struct Route result = {
+	Route result = {
 		{
 			{0, 0},
 			{1, 0},
@@ -113,9 +113,9 @@ struct Route getBlueRoute()
 	return result;
 }
 // Build and return the route for the green trucks.
-struct Route getGreenRoute()
+Route getGreenRoute()
 {
-	struct Route result = {
+	Route result = {
 		{
 			{0, 0},
 			{1, 0},
@@ -142,9 +142,9 @@ struct Route getGreenRoute()
 	return result;
 }
 // Build and return the route for the yellow trucks.
-struct Route getYellowRoute()
+Route getYellowRoute()
 {
-	struct Route result = {
+	Route result = {
 		{
 			{0, 0},
 			{1, 0},
@@ -173,10 +173,10 @@ struct Route getYellowRoute()
 	return result;
 }
 //Add a route to a map using the indicated symbol.
-struct Map addRoute(struct Map* map, const struct Route* route)
+Map addRoute(Map* map, const Route* route)
 {
 	int r, c;
-	struct Map result = { {0}, 0 };
+	Map result = { {0}, 0 };
 
 	for (r = 0; r < map->numRows; r++)
 	{
@@ -197,25 +197,25 @@ struct Map addRoute(struct Map* map, const struct Route* route)
 	return result;
 }
 //Add a point to a route
-void addPtToRoute(struct Route* route, struct Point pt)
+void addPtToRoute(Route* route, Point pt)
 {
 	route->points[route->numPoints++] = pt;
 }
 //Add a point to a route
-void addPointToRoute(struct Route* route, const int row, const int col)
+void addPointToRoute(Route* route, const int row, const int col)
 {
-	struct Point pt = { row, col };
+	Point pt = { row, col };
 	addPtToRoute(route, pt);
 }
 //Add a point to a route if it is not equal to another point.
-void addPointToRouteIfNot(struct Route* route, const int row, const int col, const struct Point notThis)
+void addPointToRouteIfNot(Route* route, const int row, const int col, const Point notThis)
 {
-	struct Point pt = { row, col };
+	Point pt = { row, col };
 	if (notThis.row != row || notThis.col != col) addPtToRoute(route, pt);
 }
 
 //Calculate the Euclidian distance between two points.
-double distance(const struct Point* p1, const struct Point* p2)
+double distance(const Point* p1, const Point* p2)
 {
 	int deltaRow = p2->row - p1->row;
 	int deltaCol = p2->col - p1->col;
@@ -223,12 +223,12 @@ double distance(const struct Point* p1, const struct Point* p2)
 	return sqrt((double)(deltaRow * deltaRow + deltaCol * deltaCol));
 }
 //Calculate the shortest path between two points so that the path does not pass through buildings.
-struct Route shortestPath(const struct Map* map, const struct Point start, const struct Point dest)
+Route shortestPath(const Map* map, const Point start, const Point dest)
 {
-	struct Route result = { {0,0}, 0, DIVERSION };
-	struct Point last = { -1, -1 };
-	struct Point current = start;
-	struct Route possible = { {0,0},0,0 };
+	Route result = { {0,0}, 0, DIVERSION };
+	Point last = { -1, -1 };
+	Point current = start;
+	Route possible = { {0,0},0,0 };
 	int close = 0;
 
 	while (!eqPt(current, dest) && close >= 0)
@@ -247,9 +247,9 @@ struct Route shortestPath(const struct Map* map, const struct Point start, const
 }
 
 //Calculate all adjacent squares to a given point so that the squares do not overpal a building and do not include the backpath.
-struct Route getPossibleMoves(const struct Map* map, const struct Point p1, const struct Point backpath)
+Route getPossibleMoves(const Map* map, const Point p1, const Point backpath)
 {
-	struct Route result = { {0,0}, 0, DIVERSION };
+	Route result = { {0,0}, 0, DIVERSION };
 
 	if (p1.row > 0)
 	{
@@ -270,7 +270,7 @@ struct Route getPossibleMoves(const struct Map* map, const struct Point p1, cons
 }
 
 // Calculates the Euclidian distance from every point in a route to a single point and returns the index of the point in the route which is closest to the point.
-int getClosestPoint(const struct Route* route, const struct Point pt)
+int getClosestPoint(const Route* route, const Point pt)
 {
 	int i, closestIdx = -1;
 	double closestDist = 999999.9, dist;
@@ -287,7 +287,7 @@ int getClosestPoint(const struct Route* route, const struct Point pt)
 	return closestIdx;
 }
 // Compare two points for equality.
-int eqPt(const struct Point p1, const struct Point p2)
+int eqPt(const Point p1, const Point p2)
 {
 	return p1.row == p2.row && p1.col == p2.col;
 }
