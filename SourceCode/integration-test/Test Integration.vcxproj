@@ -21,11 +21,13 @@
   <ItemGroup>
     <ClCompile Include="delivery.c" />
     <ClCompile Include="mapping.c" />
+    <ClCompile Include="simulator.c" />
     <ClCompile Include="test.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="delivery.h" />
     <ClInclude Include="mapping.h" />
+    <ClInclude Include="simulator.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

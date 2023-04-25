@@ -1,37 +1,50 @@
 #include <stdio.h>
 #include <assert.h>
-#include "delivery.h"
 #include "mapping.h"
+#include "simulator.h"
 
-void valid_input() {
+void valid_input()
+{
     printf("----- TESTING WITH VALID INPUTS -----\n");
 
-    Package shipment = { 0 };
-    strcpy(shipment.input, "20 0.5 12L");
-    Map map = { 0 };
-
-    assert(assignInputs(&shipment) == 1);
-    assert(validateInputs(&shipment) == 1);
-
-    Result result = processShipment(&shipment, &map);
+    send("20 0.5 12L");
+    Result result = receive();
     assert(result.routeColor == BLUE);
     assert(result.diversion == NO_DIVERSION);
 
-    printf("----- TESTING WITH VALID INPUTS PASSED -----\n");  
+    printf("----- TESTING WITH VALID INPUTS PASSED -----\n\n");  
 }
 
-void invalid_input() {
+void _invalid_input_format()
+{
+    printf("\t---- TESTING WITH INVALID INPUT FORMAT ----\n");
     Package shipment = { 0 };
-    Map map = { 0 };
-    int result = 0;
-
-    display();
     strcpy(shipment.input, "abc");
-    result = readInput(&shipment);
-    while (result == 0) {
-        processShipment(&shipment, &map);
-        result = readInput(&shipment);
-    }
+    Map map = { 0 };
+
+    assert(assignInputs(&shipment) == 0);
+    printf("\t---- TESTING WITH VALID INPUT FORMAT PASSED ----\n");
+}
+
+void _invalid_input_weight()
+{
+    printf("\t---- TESTING WITH INVALID INPUT WEIGHT ----\n");
+    Package shipment = { 0 };
+    strcpy(shipment.input, "1005 .5 12L");
+    Map map = { 0 };
+
+    assert(assignInputs(&shipment) == 0);
+    printf("\t---- TESTING WITH VALID INPUT FORMAT PASSED ----\n");
+}
+
+void invalid_input()
+{
+    printf("----- TESTING WITH INVALID INPUTS -----\n");
+
+    _invalid_input_format();
+
+    printf("----- TESTING WITH INVALID INPUTS PASSED -----\n\n");
+
 }
 
 void valid_input_blue_route() {
@@ -59,7 +72,7 @@ int main() {
     // Add more test function calls if necessary
 
     valid_input();
-    /*invalid_input();*/
+    //invalid_input();
 
     //valid_input_blue_route();
 
