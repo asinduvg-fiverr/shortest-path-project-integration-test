@@ -7,11 +7,13 @@ void send(const char* inputStr)
 	simulator.result = (Result) { 0 };
 	Package shipment = { 0 };
 	strcpy(shipment.input, inputStr);
-	Map map = { 0 };
+	Map map = populateMap();
 
-	if (assignInputs(&shipment) == 0)
+	int input = assignInputs(&shipment);
+
+	if (input == 0 || input == 2)
 	{
-		return;
+		return; // program returns empty result on invalid input or exit
 	}
 
 	if (validateInputs(&shipment) == 0)

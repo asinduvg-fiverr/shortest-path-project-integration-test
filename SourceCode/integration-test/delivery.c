@@ -4,6 +4,28 @@
 #include "delivery.h"
 #include <string.h>
 
+// you only have to call this method if you are not using the simulator
+void run()
+{
+    display();
+    Package shipment = { 0 };
+    int inputRes = readInput(&shipment);
+    if (inputRes == 2)
+    {
+        printf("Thanks for shipping with Seneca!");
+        return;
+    }
+    else if (inputRes == 0)
+    {
+        return;
+    }
+    if (validateInputs(&shipment) == 0) return;
+
+    Map map = populateMap();
+
+    processShipment(&shipment, &map);
+}
+
 void display() 
 {
     printf("=================\n");
@@ -20,6 +42,10 @@ int readInput(Package* const shipment)
 
 int assignInputs(Package * const shipment) 
 {
+    if (strcmp(shipment->input, "0 0 x\n") == 0) {
+        return 2; // to end the program
+    }
+
     if (sscanf(shipment->input, "%lf %lf %d %c",
         &shipment->weight, &shipment->size, &shipment->row, &shipment->column) != 4) 
     {
