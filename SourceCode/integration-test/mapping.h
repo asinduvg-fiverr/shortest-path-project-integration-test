@@ -40,6 +40,20 @@ typedef struct
 	char routeSymbol;
 } Route;
 
+typedef struct
+{
+	Route blueRoute;
+	Route greenRoute;
+	Route yellowRoute;
+} Routes;
+
+typedef struct
+{
+	Route route;
+	int closestIdx;
+	double dist;
+} DetailedRoute;
+
 /**
 * Create a map with the position of all buildings in it.
 * @returns - a map with the position of all buildings added to it.

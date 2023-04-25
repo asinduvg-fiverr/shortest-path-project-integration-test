@@ -14,7 +14,7 @@ void valid_input() {
     assert(validateInputs(&shipment) == 1);
 
     Result result = processShipment(&shipment, &map);
-    assert(result.route_color == BLUE);
+    assert(result.routeColor == BLUE);
     assert(result.diversion == NO_DIVERSION);
 
     printf("----- TESTING WITH VALID INPUTS PASSED -----\n");  

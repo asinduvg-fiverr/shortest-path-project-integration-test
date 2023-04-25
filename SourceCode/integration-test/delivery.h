@@ -6,7 +6,8 @@
 
 #include "mapping.h"
 
-typedef struct {
+typedef struct
+{
     double weight;
     double size;
     int row;
@@ -14,27 +15,30 @@ typedef struct {
     char input[20];
 } Package;
 
-typedef struct {
-    double max_weight;
-    double max_size;
+typedef struct
+{
+    double maxWeight;
+    double maxSize;
     int row;
     char column;
 } Truck;
 
-typedef struct {
+typedef struct
+{
     int row;
     char col;
 } Move;
 
-typedef enum {
+typedef enum
+{
     DIVERT,
     NO_DIVERSION
 } Diversion;
 
-typedef struct {
-    int route_color;
+typedef struct
+{
+    int routeColor;
     Diversion diversion;
-    const char* divert_message;
 } Result;
 
 
@@ -50,5 +54,13 @@ int charToInt(char character);  //Returns the character converted to int: E.g A/
 char intToChar(int in);    //does the thing above in reverse: e.g 0 = A, 1 = B.... etc
 
 void addPtToRouteWrapper(const Route* const direct_route, const Route* const route);
+void selectRoute(const DetailedRoute* const blue,
+    const DetailedRoute* const green,
+    const DetailedRoute* const yellow,
+    const Route* const direct_route,
+    Result* const result,
+    Route* selected_route,
+    int* closest_idx
+);
 
 #endif
